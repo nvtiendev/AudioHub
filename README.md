@@ -1,24 +1,21 @@
-﻿# AudioHub - Frontend
+﻿# AudioHub - Backend
 
-This branch contains the **frontend** source code for AudioHub.
+This branch contains the **backend** source code for AudioHub.
 
 ## Tech Stack
-- Framework : React 18 (Vite)
-- Language  : TypeScript
-- Styling   : Vanilla CSS (Glassmorphism)
-- Icons     : Lucide React
-- Animation : Framer Motion
+- Framework : .NET 9.0 Web API
+- Language  : C# 13
+- Docs      : Swagger / OpenAPI
 
 ## Getting Started
 ```bash
-cd audiohub-frontend
-npm install
-npm run dev
+cd audiohub-backend/AudioHub.API
+dotnet run
 ```
-App runs at: http://localhost:3000
+API runs at: http://localhost:5000
 
 ## Docker
 ```bash
-docker build -f Dockerfile.frontend -t audiohub-frontend .
-docker run -p 3000:3000 audiohub-frontend
+docker build -f Dockerfile.backend -t audiohub-backend .
+docker run -p 5000:5000 audiohub-backend
 ```
