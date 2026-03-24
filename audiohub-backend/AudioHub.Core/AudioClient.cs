@@ -6,12 +6,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using AudioHub.Core.Clients;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using AudioHub.Core.Entities;
 =======
 using AudioHub.Core.Entities.Genres;
 using AudioHub.Core.Entities.Songs;
 using AudioHub.Core.Entities.Videos;
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+using AudioHub.Core.Entities;
+>>>>>>> 0a1a414 (feat: Implement core audio client, API controllers for audio and downloads, and supporting utilities.)
 using AudioHub.Core.Exceptions;
 using AudioHub.Core.Net;
 using AudioHub.Core.Utilities;

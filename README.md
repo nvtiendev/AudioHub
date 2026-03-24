@@ -60,4 +60,3 @@ docker-compose up --build
 
 ## 📝 License
 This project is licensed under the MIT License.
->>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)

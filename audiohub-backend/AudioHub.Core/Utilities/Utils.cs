@@ -94,13 +94,16 @@ namespace AudioHub.Core.Utilities
 
         internal static void CheckErrorCode(string json, out JsonNode node)
         {
-            JsonNode? jsonNode = JsonNode.Parse(json) ?? throw new AudioHubException("The API returned an invalid response");
-            int errorCode = jsonNode["err"].GetIntValue();
+            JsonNode jsonNode = JsonNode.Parse(json) ?? throw new AudioHubException("The API returned an invalid response");
+            int errorCode = jsonNode["err"]?.GetValue<int>() ?? -1;
             if (errorCode != 0)
-                throw new AudioHubAPIException(errorCode, jsonNode["msg"].GetStringValue());
-            if (!jsonNode.AsObject().ContainsKey("data") || jsonNode["data"] is null)
+                throw new AudioHubAPIException(errorCode, jsonNode["msg"]?.GetValue<string>() ?? "Unknown error");
+            
+            var dataNode = jsonNode["data"];
+            if (dataNode == null)
                 throw new AudioHubException("The API does not return any data");
-            node = jsonNode["data"]!;
+                
+            node = dataNode;
         }
     }
 }

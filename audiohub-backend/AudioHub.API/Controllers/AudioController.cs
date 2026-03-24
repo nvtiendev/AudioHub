@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using AudioHub.Core;
 using AudioHub.Core.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace AudioHub.API.Controllers
 {
