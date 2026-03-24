@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using AudioHub.Core;
 using System.Net.Http;
 using System.Net.Http.Headers;
+<<<<<<< HEAD
 using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
@@ -12,6 +13,11 @@ namespace AudioHub.API.Controllers
     /// <summary>
     /// Cung cấp các phương thức tải nhạc về máy (MP3 cá lẻ hoặc ZIP cả album).
     /// </summary>
+=======
+
+namespace AudioHub.API.Controllers
+{
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
     [ApiController]
     [Route("api/[controller]")]
     public class DownloadController : ControllerBase
@@ -19,6 +25,7 @@ namespace AudioHub.API.Controllers
         private readonly AudioClient _audioClient;
         private readonly HttpClient _httpClient;
 
+<<<<<<< HEAD
         public DownloadController(AudioClient audioClient, HttpClient httpClient)
         {
             _audioClient = audioClient;
@@ -37,16 +44,36 @@ namespace AudioHub.API.Controllers
             {
                 var song = await _audioClient.Songs.GetAsync(idOrUrl);
                 var streamUrl = await _audioClient.Songs.GetAudioStreamUrlAsync(idOrUrl);
+=======
+        public DownloadController()
+        {
+            _audioClient = new AudioClient();
+            _httpClient = new HttpClient();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ProxyDownload(string id)
+        {
+            try
+            {
+                var song = await _audioClient.Songs.GetAsync(id);
+                var streamUrl = await _audioClient.Songs.GetAudioStreamUrlAsync(id);
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
                 
                 var response = await _httpClient.GetAsync(streamUrl, HttpCompletionOption.ResponseHeadersRead);
                 var stream = await response.Content.ReadAsStreamAsync();
 
+<<<<<<< HEAD
                 var safeArtists = string.Join("_", song.AllArtistsNames.Split(Path.GetInvalidFileNameChars()));
                 var safeTitle = string.Join("_", song.Title.Split(Path.GetInvalidFileNameChars()));
                 var fileName = $"{safeArtists} - {safeTitle}.mp3";
                 
                 string encodedName = Uri.EscapeDataString(fileName);
                 Response.Headers.Append("Content-Disposition", $"attachment; filename*=UTF-8''{encodedName}");
+=======
+                var fileName = $"{song.AllArtistsNames} - {song.Title}.mp3";
+                Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{fileName}\"");
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
                 
                 return File(stream, "audio/mpeg");
             }
@@ -56,6 +83,7 @@ namespace AudioHub.API.Controllers
             }
         }
 
+<<<<<<< HEAD
         /// <summary>
         /// Tải về toàn bộ bài hát trong một Album/Playlist dưới dạng file nén ZIP.
         /// </summary>
@@ -67,6 +95,14 @@ namespace AudioHub.API.Controllers
             try
             {
                 var album = await _audioClient.Albums.GetAsync(idOrUrl);
+=======
+        [HttpGet("album/{id}")]
+        public async Task<IActionResult> DownloadAlbum(string id)
+        {
+            try
+            {
+                var album = await _audioClient.Albums.GetAsync(id);
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
                 if (album.SongList == null || album.SongList.Items.Count == 0)
                     return BadRequest(new { message = "Album không có bài hát." });
 
@@ -82,6 +118,7 @@ namespace AudioHub.API.Controllers
                         try
                         {
                             var streamUrl = await _audioClient.Songs.GetAudioStreamUrlAsync(song.ID);
+<<<<<<< HEAD
                             var response = await _httpClient.GetAsync(streamUrl, HttpCompletionOption.ResponseHeadersRead);
                             var stream = await response.Content.ReadAsStreamAsync();
                             
@@ -93,17 +130,30 @@ namespace AudioHub.API.Controllers
                             using (var entryStream = entry.Open())
                             {
                                 await stream.CopyToAsync(entryStream);
+=======
+                            var response = await _httpClient.GetAsync(streamUrl);
+                            var content = await response.Content.ReadAsByteArrayAsync();
+                            
+                            var entry = archive.CreateEntry($"{song.AllArtistsNames} - {song.Title}.mp3");
+                            using (var entryStream = entry.Open())
+                            {
+                                await entryStream.WriteAsync(content, 0, content.Length);
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
                             }
                         }
                         catch { /* Skip failed songs */ }
                     }
                 }
                 memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+<<<<<<< HEAD
                 
                 string encodedAlbumName = Uri.EscapeDataString($"{album.Title}.zip");
                 Response.Headers.Append("Content-Disposition", $"attachment; filename*=UTF-8''{encodedAlbumName}");
 
                 return File(memoryStream, "application/zip");
+=======
+                return File(memoryStream, "application/zip", $"{album.Title}.zip");
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
             }
             catch (Exception ex)
             {

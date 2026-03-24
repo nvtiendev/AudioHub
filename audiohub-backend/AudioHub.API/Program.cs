@@ -1,14 +1,20 @@
+<<<<<<< HEAD
 using AudioHub.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+=======
+var builder = WebApplication.CreateBuilder(args);
+
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
+<<<<<<< HEAD
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -42,6 +48,9 @@ builder.Services.AddSingleton<AudioClient>(sp => {
     return client;
 });
 
+=======
+builder.Services.AddEndpointsApiExplorer();
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -49,6 +58,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+<<<<<<< HEAD
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || true) // Always enable for now as requested
 {
@@ -59,6 +69,8 @@ if (app.Environment.IsDevelopment() || true) // Always enable for now as request
     });
 }
 
+=======
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthorization();

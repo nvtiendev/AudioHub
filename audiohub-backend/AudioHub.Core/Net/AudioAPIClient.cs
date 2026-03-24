@@ -33,6 +33,7 @@ namespace AudioHub.Core.Net
             foreach (var param in parameters)
                 pr.Add(param.Key, param.Value);
             pr.Add("sig", Sign(path, pr));
+<<<<<<< HEAD
             
             string urlParam = Utils.ChainParams(pr);
             string fullUrl = Constants.SOURCE_LINK.TrimEnd('/') + Constants.API_BASE_PATH + path.TrimStart('/') + "?" + urlParam;
@@ -46,6 +47,13 @@ namespace AudioHub.Core.Net
             if (!response.IsSuccessStatusCode)
                 throw new AudioHubException($"API Error: {response.StatusCode}");
             
+=======
+            HttpRequestMessage request = CreateRequest(HttpMethod.Get, Constants.SOURCE_LINK.TrimEnd('/') + Constants.API_BASE_PATH + path.TrimStart('/'), pr);
+            HttpResponseMessage response = await http.SendAsync(request, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            
+            Utils.CheckErrorCode(await response.Content.ReadAsStringAsync(cancellationToken), out JsonNode result);
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
             return result;
         }
 
@@ -60,6 +68,7 @@ namespace AudioHub.Core.Net
         {
             var hashParams = parameters
                 .Where(p => Constants.HASH_PARAMS.Contains(p.Key))
+<<<<<<< HEAD
                 .OrderBy(p => p.Key)
                 .Select(p => $"{p.Key}={p.Value}")
                 .ToList();
@@ -70,6 +79,14 @@ namespace AudioHub.Core.Net
             string signPath = Constants.API_BASE_PATH + path.TrimStart('/');
             string hash = signPath + sha256;
             return Utils.HashSHA512(hash, _client.Secret);
+=======
+                .Select(p => $"{p.Key}={p.Value}")
+                .ToList();
+            hashParams.Sort(string.Compare);
+            string hash = Constants.API_BASE_PATH + path.TrimStart('/') + Utils.HashSHA256(string.Join("", hashParams));
+            string sig = Utils.HashSHA512(hash, _client.Secret);
+            return sig;
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
         }
 
         static HttpRequestMessage CreateRequest(HttpMethod method, string endpoint, Dictionary<string, object> parameters)
@@ -80,6 +97,7 @@ namespace AudioHub.Core.Net
             return request;
         }
 
+<<<<<<< HEAD
         // Bridge methods
         public async Task<Song> GetSongAsync(string id, CancellationToken cancellationToken = default)
         {
@@ -97,10 +115,20 @@ namespace AudioHub.Core.Net
             song.FullUrl = Constants.SOURCE_LINK.TrimEnd('/') + song.RelativeUrl;
             
             return song;
+=======
+        // Bridge methods (Simplified for now, will expand as needed)
+        public async Task<Song> GetSongAsync(string id, CancellationToken cancellationToken = default)
+        {
+            string path = "song/get/info";
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
+            JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+            return JsonSerializer.Deserialize<Song>(node.ToJsonString()) ?? throw new AudioHubException($"Cannot get song with id {id}.");
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
         }
 
         public async Task<Album> GetAlbumAsync(string id, CancellationToken cancellationToken = default)
         {
+<<<<<<< HEAD
             string path = "page/get/playlist";
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
@@ -126,6 +154,12 @@ namespace AudioHub.Core.Net
             }
             
             return album;
+=======
+            string path = "playlist/get/info"; // Albums are technically playlists in the API
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
+            JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+            return JsonSerializer.Deserialize<Album>(node.ToJsonString()) ?? throw new AudioHubException($"Cannot get album with id {id}.");
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
         }
 
         public async Task<string> GetAudioStreamUrlAsync(string id, AudioQuality quality = AudioQuality.Best, CancellationToken cancellationToken = default)
@@ -133,6 +167,7 @@ namespace AudioHub.Core.Net
             string path = "song/get/streaming";
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+<<<<<<< HEAD
             
             string? url = node["128"]?.GetValue<string>();
             if (string.IsNullOrEmpty(url) || url == "VIP")
@@ -148,6 +183,10 @@ namespace AudioHub.Core.Net
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             return JsonSerializer.Deserialize<Lyric>(node.ToJsonString(), options) ?? throw new AudioHubException($"Cannot get lyrics for id {id}.");
+=======
+            // ... (Logic from ZingMP3APIClient.cs)
+            return node["128"]?.GetValue<string>() ?? throw new AudioHubException("No stream link.");
+>>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
         }
     }
 }
