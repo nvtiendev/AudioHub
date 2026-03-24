@@ -1,0 +1,33 @@
+# .NET (Visual Studio, Rider, etc.)
+bin/
+obj/
+TestResults/
+*.user
+*.userosscache
+*.sln.docuser
+.vs/
+.vscode/
+*.swp
+*.bak
+*.tmp
+.idea/
+
+# Node.js (React/Vite)
+node_modules/
+dist/
+dist-ssr/
+*.local
+.npm/
+.eslintcache
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Custom
+audiohub-backend/dummy.txt
+audiohub-backend/AudioHub.API/appsettings.Development.json
+audiohub-backend/AudioHub.API/appsettings.json
