@@ -20,16 +20,16 @@ namespace AudioHub.Core.Clients
 
         public async Task<Song> GetAsync(string idOrUrl, CancellationToken cancellationToken = default)
         {
+            // Ensure any URL-encoded characters (like slashes) are decoded before Regex matching
+            idOrUrl = System.Net.WebUtility.UrlDecode(idOrUrl);
+            
             string id = idOrUrl;
-            if (Uri.TryCreate(idOrUrl, UriKind.Absolute, out _))
+            var match = Regexes.SongUrl.Match(idOrUrl);
+            if (match.Success) id = match.Groups[2].Value;
+            else
             {
-                var match = Regexes.SongUrl.Match(idOrUrl);
-                if (match.Success) id = match.Groups[2].Value;
-                else
-                {
-                    match = Regexes.ShortSongUrl.Match(idOrUrl);
-                    if (match.Success) id = match.Groups[1].Value;
-                }
+                match = Regexes.ShortSongUrl.Match(idOrUrl);
+                if (match.Success) id = match.Groups[1].Value;
             }
             
             if (!Regexes.SongID.IsMatch(id))
@@ -40,8 +40,15 @@ namespace AudioHub.Core.Clients
 
         public async Task<string> GetAudioStreamUrlAsync(string idOrUrl, AudioQuality quality = AudioQuality.Best, CancellationToken cancellationToken = default)
         {
+            idOrUrl = System.Net.WebUtility.UrlDecode(idOrUrl);
             string id = idOrUrl;
-            // ... (Simple ID extraction for now)
+            var match = Regexes.SongUrl.Match(idOrUrl);
+            if (match.Success) id = match.Groups[2].Value;
+            else
+            {
+                match = Regexes.ShortSongUrl.Match(idOrUrl);
+                if (match.Success) id = match.Groups[1].Value;
+            }
             return await _client.APIClient.GetAudioStreamUrlAsync(id, quality, cancellationToken);
         }
     }

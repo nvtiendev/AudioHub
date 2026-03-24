@@ -18,13 +18,20 @@ namespace AudioHub.Core.Clients
 
         public async Task<Album> GetAsync(string idOrUrl, CancellationToken cancellationToken = default)
         {
-            string id = idOrUrl;
-            if (Uri.TryCreate(idOrUrl, UriKind.Absolute, out _))
-            {
-                var match = Regexes.AlbumUrl.Match(idOrUrl);
-                if (match.Success) id = match.Groups[1].Value;
-            }
+            // Ensure any URL-encoded characters (like slashes) are decoded before Regex matching
+            idOrUrl = System.Net.WebUtility.UrlDecode(idOrUrl);
             
+            string id = idOrUrl;
+            var match = Regexes.AlbumUrl.Match(idOrUrl);
+            if (match.Success) id = match.Groups[2].Value;
+            else if ((match = Regexes.ShortAlbumUrl.Match(idOrUrl)).Success) id = match.Groups[1].Value;
+            else if ((match = Regexes.PlaylistUrl.Match(idOrUrl)).Success) id = match.Groups[2].Value;
+            else if ((match = Regexes.PlaylistID.Match(idOrUrl)).Success) id = match.Value;
+            
+            if (!Regexes.AlbumID.IsMatch(id) && !Regexes.PlaylistID.IsMatch(id))
+                throw new AudioHubException("Invalid Album/Playlist ID or URL");
+            
+            // Console.WriteLine($"[AudioHub API] Album ID Extracted: {id} from {idOrUrl}");
             return await _client.APIClient.GetAlbumAsync(id, cancellationToken);
         }
     }
