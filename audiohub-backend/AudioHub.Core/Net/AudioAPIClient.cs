@@ -34,6 +34,7 @@ namespace AudioHub.Core.Net
                 pr.Add(param.Key, param.Value);
             pr.Add("sig", Sign(path, pr));
 <<<<<<< HEAD
+<<<<<<< HEAD
             
             string urlParam = Utils.ChainParams(pr);
             string fullUrl = Constants.SOURCE_LINK.TrimEnd('/') + Constants.API_BASE_PATH + path.TrimStart('/') + "?" + urlParam;
@@ -54,6 +55,21 @@ namespace AudioHub.Core.Net
             
             Utils.CheckErrorCode(await response.Content.ReadAsStringAsync(cancellationToken), out JsonNode result);
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+            
+            string urlParam = Utils.ChainParams(pr);
+            string fullUrl = Constants.SOURCE_LINK.TrimEnd('/') + Constants.API_BASE_PATH + path.TrimStart('/') + "?" + urlParam;
+            
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+            HttpResponseMessage response = await http.SendAsync(request, cancellationToken);
+            
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            Utils.CheckErrorCode(responseBody, out JsonNode result);
+            
+            if (!response.IsSuccessStatusCode)
+                throw new AudioHubException($"API Error: {response.StatusCode}");
+            
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
             return result;
         }
 
@@ -68,6 +84,7 @@ namespace AudioHub.Core.Net
         {
             var hashParams = parameters
                 .Where(p => Constants.HASH_PARAMS.Contains(p.Key))
+<<<<<<< HEAD
 <<<<<<< HEAD
                 .OrderBy(p => p.Key)
                 .Select(p => $"{p.Key}={p.Value}")
@@ -87,6 +104,18 @@ namespace AudioHub.Core.Net
             string sig = Utils.HashSHA512(hash, _client.Secret);
             return sig;
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+                .OrderBy(p => p.Key)
+                .Select(p => $"{p.Key}={p.Value}")
+                .ToList();
+
+            string paramsString = string.Join("", hashParams);
+            string sha256 = Utils.HashSHA256(paramsString);
+            
+            string signPath = Constants.API_BASE_PATH + path.TrimStart('/');
+            string hash = signPath + sha256;
+            return Utils.HashSHA512(hash, _client.Secret);
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         }
 
         static HttpRequestMessage CreateRequest(HttpMethod method, string endpoint, Dictionary<string, object> parameters)
@@ -97,6 +126,7 @@ namespace AudioHub.Core.Net
             return request;
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         // Bridge methods
         public async Task<Song> GetSongAsync(string id, CancellationToken cancellationToken = default)
@@ -117,17 +147,35 @@ namespace AudioHub.Core.Net
             return song;
 =======
         // Bridge methods (Simplified for now, will expand as needed)
+=======
+        // Bridge methods
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         public async Task<Song> GetSongAsync(string id, CancellationToken cancellationToken = default)
         {
-            string path = "song/get/info";
+            string path = "page/get/song";
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+<<<<<<< HEAD
             return JsonSerializer.Deserialize<Song>(node.ToJsonString()) ?? throw new AudioHubException($"Cannot get song with id {id}.");
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var song = JsonSerializer.Deserialize<Song>(node.ToJsonString(), options) ?? throw new AudioHubException($"Cannot get song with id {id}.");
+            
+            // Manual mapping for frontend compatibility
+            song.Id = song.ID;
+            song.AllArtistsNames = song.ArtistsNames;
+            song.BigThumbnailUrl = song.Thumbnail;
+            song.IsVIP = song.StreamingStatus > 1; // 1 is Free, 2 is Plus, 3 is Premium
+            song.FullUrl = Constants.SOURCE_LINK.TrimEnd('/') + song.RelativeUrl;
+            
+            return song;
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         }
 
         public async Task<Album> GetAlbumAsync(string id, CancellationToken cancellationToken = default)
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             string path = "page/get/playlist";
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
@@ -160,6 +208,33 @@ namespace AudioHub.Core.Net
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             return JsonSerializer.Deserialize<Album>(node.ToJsonString()) ?? throw new AudioHubException($"Cannot get album with id {id}.");
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+            string path = "page/get/playlist";
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
+            JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var album = JsonSerializer.Deserialize<Album>(node.ToJsonString(), options) ?? throw new AudioHubException($"Cannot get album with id {id}.");
+            
+            // Manual mapping for frontend compatibility
+            album.Id = album.ID;
+            album.ThumbnailUrl = album.ThumbnailM;
+            album.BigThumbnailUrl = album.ThumbnailM;
+            album.SongList = album.Song;
+            
+            if (album.SongList?.Items != null)
+            {
+                foreach (var s in album.SongList.Items)
+                {
+                    s.Id = s.ID;
+                    s.AllArtistsNames = s.ArtistsNames;
+                    s.BigThumbnailUrl = s.Thumbnail;
+                    s.IsVIP = s.StreamingStatus > 1; // 1 is Free, 2 is Plus, 3 is Premium
+                    s.FullUrl = Constants.SOURCE_LINK.TrimEnd('/') + s.RelativeUrl;
+                }
+            }
+            
+            return album;
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         }
 
         public async Task<string> GetAudioStreamUrlAsync(string id, AudioQuality quality = AudioQuality.Best, CancellationToken cancellationToken = default)
@@ -168,6 +243,9 @@ namespace AudioHub.Core.Net
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
             
             string? url = node["128"]?.GetValue<string>();
             if (string.IsNullOrEmpty(url) || url == "VIP")
@@ -183,10 +261,13 @@ namespace AudioHub.Core.Net
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             return JsonSerializer.Deserialize<Lyric>(node.ToJsonString(), options) ?? throw new AudioHubException($"Cannot get lyrics for id {id}.");
+<<<<<<< HEAD
 =======
             // ... (Logic from ZingMP3APIClient.cs)
             return node["128"]?.GetValue<string>() ?? throw new AudioHubException("No stream link.");
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         }
     }
 }

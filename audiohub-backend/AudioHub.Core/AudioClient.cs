@@ -45,6 +45,7 @@ namespace AudioHub.Core
             APIClient = new AudioAPIClient(this);
             Songs = new SongClient(this);
 <<<<<<< HEAD
+<<<<<<< HEAD
             Albums = new AlbumClient(this);
             Playlists = new PlaylistClient(this);
             Lyrics = new LyricClient(this);
@@ -57,6 +58,11 @@ namespace AudioHub.Core
             Search = new SearchClient(this);
             CurrentUser = new UserClient(this);
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+            Albums = new AlbumClient(this);
+            Playlists = new PlaylistClient(this);
+            Lyrics = new LyricClient(this);
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         }
 
         public AudioClient(string apiKey = Constants.DEFAULT_API_KEY, string secret = Constants.DEFAULT_SECRET, string version = Constants.DEFAULT_VERSION) : this(new HttpClient(new HttpClientHandler()
@@ -66,6 +72,7 @@ namespace AudioHub.Core
         { }
 
         public SongClient Songs { get; }
+<<<<<<< HEAD
 <<<<<<< HEAD
         public AlbumClient Albums { get; }
         public PlaylistClient Playlists { get; }
@@ -114,26 +121,17 @@ namespace AudioHub.Core
             }
 =======
         public ArtistClient Artists { get; }
+=======
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         public AlbumClient Albums { get; }
         public PlaylistClient Playlists { get; }
-        public VideoClient Videos { get; }
-        public GenreClient Genres { get; }
-        public SearchClient Search { get; }
-        public UserClient CurrentUser { get; }
+        public LyricClient Lyrics { get; }
 
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            var httpResponse = await HttpClient.GetAsync(Constants.SOURCE_LINK, cancellationToken);
-            if (!httpResponse.IsSuccessStatusCode)
-                throw new AudioHubException($"Failed to fetch source page. Status code: {httpResponse.StatusCode}");
-            
-            string html = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            Match match = Regexes.MainMinJS.Match(html);
-            Version = match.Groups[1].Value;
-            string mainMinJSUrl = match.Value;
-            
-            var handler = new HttpClientHandler()
+            try
             {
+<<<<<<< HEAD
                 AutomaticDecompression = DecompressionMethods.All,
             };
             HttpClient client = new HttpClient(handler, true);
@@ -149,6 +147,45 @@ namespace AudioHub.Core
             APIKey = apiKeyAndSecretMatch.Groups[1].Value;
             Secret = apiKeyAndSecretMatch.Groups[2].Value;
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+                Console.WriteLine($"[AudioHub API] Initializing from {Constants.SOURCE_LINK}...");
+                var response = await HttpClient.GetAsync(Constants.SOURCE_LINK, cancellationToken);
+                response.EnsureSuccessStatusCode();
+                var html = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                // Strategy 1: Find all script URLs and check them
+                var scriptMatches = Regex.Matches(html, "<script.*?src=\"(.*?)\"");
+                foreach (Match sm in scriptMatches)
+                {
+                    var jsUrl = sm.Groups[1].Value;
+                    if (jsUrl.Contains("main.") || jsUrl.Contains("vendor.") || jsUrl.Contains("desktop"))
+                    {
+                        if (!jsUrl.StartsWith("http")) jsUrl = Constants.SOURCE_LINK.TrimEnd('/') + jsUrl;
+                        
+                        try {
+                            var jsResponse = await HttpClient.GetAsync(jsUrl, cancellationToken);
+                            if (!jsResponse.IsSuccessStatusCode) continue;
+                            var jsContent = await jsResponse.Content.ReadAsStringAsync(cancellationToken);
+                            
+                            var keyMatch = Regexes.ApiKeySecret.Match(jsContent);
+                            if (keyMatch.Success)
+                            {
+                                APIKey = keyMatch.Groups[1].Value;
+                                Secret = keyMatch.Groups[2].Value;
+                                Console.WriteLine($"[AudioHub API] FOUND NEW KEYS! Key={APIKey.Substring(0, 5)}..., Secret={Secret.Substring(0, 3)}...");
+                                return;
+                            }
+                        } catch { }
+                    }
+                }
+                
+                Console.WriteLine("[AudioHub API] WARNING: Could not rotate keys. API might reject requests with default keys.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[AudioHub API] ERROR: Initialization failed: {ex.Message}");
+            }
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         }
     }
 }

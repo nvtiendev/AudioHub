@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 using System.Collections.Generic;
 =======
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+using System.Collections.Generic;
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 using System.Text.Json.Serialization;
 using AudioHub.Core.Interfaces;
 using AudioHub.Core.Utilities;
@@ -15,15 +19,20 @@ namespace AudioHub.Core.Entities
 
         [JsonPropertyName("id")]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public string Id { get; set; } = "";
 =======
         public string Id => ID;
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+        public string Id { get; set; } = "";
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 
         [JsonPropertyName("title")]
         public string Title { get; set; } = "";
 
         [JsonPropertyName("artistsNames")]
+<<<<<<< HEAD
 <<<<<<< HEAD
         public string ArtistsNames { get; set; } = "";
 
@@ -39,6 +48,17 @@ namespace AudioHub.Core.Entities
 
         [JsonPropertyName("thumbnailM")]
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+        public string ArtistsNames { get; set; } = "";
+
+        [JsonPropertyName("allArtistsNames")]
+        public string AllArtistsNames { get; set; } = "";
+
+        [JsonPropertyName("thumbnail")]
+        public string Thumbnail { get; set; } = "";
+
+        [JsonPropertyName("bigThumbnailUrl")]
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         public string BigThumbnailUrl { get; set; } = "";
 
         [JsonPropertyName("duration")]
@@ -48,16 +68,22 @@ namespace AudioHub.Core.Entities
         public int StreamingStatus { get; set; }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         [JsonPropertyName("isVIP")]
         public bool IsVIP { get; set; }
 =======
         [JsonIgnore]
         public bool IsVIP => StreamingStatus != 0;
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+        [JsonPropertyName("isVIP")]
+        public bool IsVIP { get; set; }
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 
         [JsonPropertyName("link")]
         public string RelativeUrl { get; set; } = "";
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         [JsonPropertyName("fullUrl")]
         public string FullUrl { get; set; } = "";
@@ -65,6 +91,10 @@ namespace AudioHub.Core.Entities
         [JsonIgnore]
         public string FullUrl => Constants.SOURCE_LINK.TrimEnd('/') + RelativeUrl;
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+        [JsonPropertyName("fullUrl")]
+        public string FullUrl { get; set; } = "";
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 
         [JsonPropertyName("album")]
         public Album? Album { get; set; }
@@ -84,6 +114,7 @@ namespace AudioHub.Core.Entities
         public string ID { get; set; } = "";
 
         [JsonPropertyName("id")]
+<<<<<<< HEAD
 <<<<<<< HEAD
         public string Id { get; set; } = "";
 
@@ -105,13 +136,30 @@ namespace AudioHub.Core.Entities
         [JsonPropertyName("songList")]
 =======
         public string Id => ID;
+=======
+        public string Id { get; set; } = "";
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 
         [JsonPropertyName("title")]
         public string Title { get; set; } = "";
+
         [JsonPropertyName("thumbnailM")]
+        public string ThumbnailM { get; set; } = "";
+
+        [JsonPropertyName("thumbnailUrl")]
         public string ThumbnailUrl { get; set; } = "";
+
+        [JsonPropertyName("bigThumbnailUrl")]
+        public string BigThumbnailUrl { get; set; } = "";
+
         [JsonPropertyName("song")]
+<<<<<<< HEAD
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+        public SongListData? Song { get; set; }
+
+        [JsonPropertyName("songList")]
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
         public SongListData? SongList { get; set; }
     }
 
@@ -121,6 +169,9 @@ namespace AudioHub.Core.Entities
         public List<Song> Items { get; set; } = new();
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 
     public class Lyric
     {
@@ -143,6 +194,9 @@ namespace AudioHub.Core.Entities
         [JsonPropertyName("data")]
         public string Content { get; set; } = "";
     }
+<<<<<<< HEAD
 =======
 >>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
+=======
+>>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 }
