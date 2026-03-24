@@ -179,25 +179,17 @@ function App() {
 
               <div className="flex flex-col gap-2">
                 {album.songList?.items.map((s) => (
-<<<<<<< HEAD
                   <div key={s.id} className="flex items-center gap-6 p-3 rounded-xl hover:bg-white/5 transition-all group">
                     <img
                       src={s.bigThumbnailUrl}
                       alt={s.title}
                       className="w-12 h-12 rounded-2xl object-cover shadow-lg border border-white/10"
                     />
-=======
-                  <div key={s.id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all group">
-                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-gray-400 group-hover:text-indigo-400 transition-colors">
-                      <Music size={18} />
-                    </div>
->>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="font-medium truncate">{s.title}</p>
                         {s.isVIP && <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 text-yellow-500 rounded border border-yellow-500/30 font-bold">VIP</span>}
                       </div>
-<<<<<<< HEAD
                       <p className="text-xs text-gray-400 truncate">{s.allArtistsNames}</p>
                     </div>
                     {!s.isVIP && (
@@ -206,12 +198,6 @@ function App() {
                         className="btn-download-small"
                         title="Tải về máy"
                       >
-=======
-                      <p className="text-xs text-gray-500 truncate">{s.allArtistsNames}</p>
-                    </div>
-                    {!s.isVIP && (
-                      <button onClick={() => handleDownload(s.id)} className="p-2 text-gray-500 hover:text-indigo-400 transition-colors">
->>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
                         <Download size={18} />
                       </button>
                     )}

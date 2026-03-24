@@ -1,29 +1,14 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 using AudioHub.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-<<<<<<< HEAD
-=======
-var builder = WebApplication.CreateBuilder(args);
-
->>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
-=======
->>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -57,12 +42,6 @@ builder.Services.AddSingleton<AudioClient>(sp => {
     return client;
 });
 
-<<<<<<< HEAD
-=======
-builder.Services.AddEndpointsApiExplorer();
->>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
-=======
->>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -70,10 +49,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || true) // Always enable for now as requested
 {
@@ -84,11 +59,6 @@ if (app.Environment.IsDevelopment() || true) // Always enable for now as request
     });
 }
 
-<<<<<<< HEAD
-=======
->>>>>>> 8c372e7 (Initialize professional full-stack AudioHub project)
-=======
->>>>>>> 395a397 (feat: Implement initial AudioHub API backend for fetching and downloading audio data from ZingMP3.)
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthorization();
