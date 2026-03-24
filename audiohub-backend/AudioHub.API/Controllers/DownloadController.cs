@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using AudioHub.Core;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Linq;
+using System.IO;
+using System.IO.Compression;
 
 namespace AudioHub.API.Controllers
 {
