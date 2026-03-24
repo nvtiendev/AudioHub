@@ -78,6 +78,8 @@ body {
 .text-indigo-400 { color: #818cf8; }
 .text-indigo-300 { color: #a5b4fc; }
 .text-red-400 { color: #f87171; }
+.text-green-400 { color: #4ade80; }
+.text-green-500 { color: #22c55e; }
 .text-yellow-500 { color: #eab308; }
 .text-white { color: #ffffff; }
 
@@ -122,7 +124,7 @@ body {
 .to-purple-400 { --tw-gradient-to: #c084fc; }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -137,7 +139,27 @@ body {
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 20px rgba(129, 140, 248, 0.6);
+}
+
+.btn-download-small {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-download-small:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  transform: scale(1.1);
+  color: #ffffff;
 }
 
 .input-field {
