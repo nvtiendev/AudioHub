@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import api from './api'
 import { Search, Download, Music, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 
 interface Song {
   id: string
@@ -38,10 +40,10 @@ function App() {
     setAlbum(null)
     try {
       if (query.includes('/album/') || query.includes('/playlist/')) {
-        const response = await axios.get(`/api/audio/album/${encodeURIComponent(query)}`)
+        const response = await api.get(`/api/audio/album/${encodeURIComponent(query)}`)
         setAlbum(response.data)
       } else {
-        const response = await axios.get(`/api/audio/song/${encodeURIComponent(query)}`)
+        const response = await api.get(`/api/audio/song/${encodeURIComponent(query)}`)
         setSong(response.data)
       }
     } catch (err: any) {
@@ -52,11 +54,11 @@ function App() {
   }
 
   const handleDownload = (id: string) => {
-    window.open(`/api/download/${id}`, '_blank')
+    window.open(`${API_BASE}/api/download/${id}`, '_blank')
   }
 
   const handleDownloadAlbum = (id: string) => {
-    window.open(`/api/download/album/${id}`, '_blank')
+    window.open(`${API_BASE}/api/download/album/${id}`, '_blank')
   }
 
   return (
